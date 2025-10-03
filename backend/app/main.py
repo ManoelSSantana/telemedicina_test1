@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine
 from . import models
+from .database import engine
 from .routers import auth, patients, professionals
 
 app = FastAPI()
 
-# CORS configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -22,3 +21,12 @@ models.Base.metadata.create_all(bind=engine)
 app.include_router(auth.router)
 app.include_router(patients.router)
 app.include_router(professionals.router)
+
+@app.get("/")
+async def root():
+    return {"message": "Sistema de Telemedicina API"}
+
+@app.get("/api/health")
+async def health_check():
+    return {"status": "online"}
+    return {"status": "online"}
